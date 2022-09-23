@@ -6,6 +6,10 @@
     
    
 }
+body
+{
+    background-color: rgb(230, 235, 235);
+}
 
 /* .container{
     display: grid;
@@ -17,4 +21,29 @@
 
 .btnstyle{
     margin-left: 5px;
+}
+.heading{
+    background-color: rgb(192, 164, 164);
+    text-align: center;
+    margin: auto;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.heading1{
+    background-color: rgb(77, 233, 98);
+    text-align: center;
+}
+.heading2{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(187, 187, 222);
+}
+
+.heading4{
+    width: 287px;
+    margin-left: -17px;
+
+}
+.middle{
+    text-align: center;
 }

@@ -2,7 +2,7 @@
 import { nanoid } from "nanoid";
 import './App.css';
 import React, { Fragment, useState } from "react";
-// import data from './mock-data.json';
+import data from './mock-data.json';
 import './css/form.css'
 import Read from './component/Read';
 import Edit from "./component/Edit";
@@ -11,21 +11,21 @@ import Edit from "./component/Edit";
 
 function App() {
 
-  const [contacts, setContacts] = useState([]);
+  const [contacts, setContacts] = useState(data);
   const [addFormData, setAddFormData] = useState({
     fullName: "",
     email: "",
     gender: '',
-    status: '',
     bdate: '',
     hobby: ''
 
   });
   const [editFormData, setEditFormData] = useState({
     fullName: "",
-    address: "",
-    phoneNumber: "",
     email: "",
+    gender: '',
+    bdate: '',
+    hobby: ''
   });
 
   const [editContactId, setEditContactId] = useState(null);
@@ -40,6 +40,17 @@ function App() {
 
     setAddFormData(newFormData);
   };
+  const handleEditFormChange = (event) => {
+    event.preventDefault();
+
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = { ...editFormData };
+    newFormData[fieldName] = fieldValue;
+
+    setEditFormData(newFormData);
+  };
   const handleAddFormSubmit = (event) => {
     event.preventDefault();
 
@@ -48,24 +59,76 @@ function App() {
       fullName: addFormData.fullName,
       email: addFormData.email,
       gender: addFormData.gender,
-      status: addFormData.status,
       bdate: addFormData.bdate,
-      hobby: addFormData.hobby
+      hobby: addFormData.hobby,
     };
 
     const newContacts = [...contacts, newContact];
     setContacts(newContacts);
   };
+
+
+
+
+
+
+
+
+  const handleEditFormSubmit = (event) => {
+    event.preventDefault();
+
+    const editedContact = {
+      id: editContactId,
+      fullName: editFormData.fullName,
+      email: editFormData.email,
+      gender: editFormData.gender,
+      bdate: editFormData.bdate,
+      hobby: editFormData.hobby,
+    };
+
+    const newContacts = [...contacts];
+
+    const index = contacts.findIndex((contact) => contact.id === editContactId);
+
+    newContacts[index] = editedContact;
+
+    setContacts(newContacts);
+    setEditContactId(null);
+  };
+
   const handleEditClick = (event, contact) => {
     event.preventDefault();
     setEditContactId(contact.id);
 
+    const formValues = {
+      fullName: contact.fullName,
+      email: contact.email,
+      gender: contact.gender,
 
+      bdate: contact.bdate,
+      hobby: contact.hobby
+    };
+
+    setEditFormData(formValues);
+  };
+
+  const handleCancelClick = () => {
+    setEditContactId(null);
+  };
+
+  const handleDeleteClick = (contactId) => {
+    const newContacts = [...contacts];
+
+    const index = contacts.findIndex((contact) => contact.id === contactId);
+
+    newContacts.splice(index, 1);
+
+    setContacts(newContacts);
   };
   return (
     <div>
-      <h2>Add Contacts here</h2>
-      <div className="container">
+      <h2 className="heading">Add Your Data Here</h2>
+      <div className="container heading2">
         <fieldset className="scheduler-border">
           <legend className="scheduler-border"> <marquee width="60%" direction="up" height="50px" >Employee data</marquee> </legend>
           <form onSubmit={handleAddFormSubmit}>
@@ -134,13 +197,11 @@ function App() {
               &nbsp;&nbsp;
               <label htmlFor="female">Female</label>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <label htmlFor="authentication"> Status</label>
-              &nbsp;&nbsp;
-              <input type="checkbox" id="status" name="status" value='Active' onChange={handleAddFormChange} />
+
             </div>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <button className="btnstyle btn btn-primary" type="submit" lassName="form-data">Add</button>
+            <button className="btnstyle btn btn-primary heading4" type="submit" lassName="form-data">Add</button>
 
 
           </form>
@@ -149,9 +210,9 @@ function App() {
 
       </div>
 
-      <h1>result</h1>
-      <div  >
-        <form >
+      <h1 className="heading1">Result Here</h1>
+      <div>
+        <form onSubmit={handleEditFormSubmit}>
           <table >
             <thead>
               <tr>
@@ -160,7 +221,6 @@ function App() {
                 <th>Gender</th>
                 <th>DOB</th>
                 <th>Hobby</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -168,8 +228,12 @@ function App() {
             <tbody>
               {contacts.map((contact) => (
                 <Fragment>
-                  {editContactId == contact.id ? (< Edit />)
-                    : (<Read contact={contact} handleEditClick={handleEditClick} />)
+                  {editContactId == contact.id ? (< Edit editFormData={editFormData}
+
+                    handleEditFormChange={handleEditFormChange}
+                    handleCancelClick={handleCancelClick}
+                  />)
+                    : (<Read contact={contact} handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} />)
                   }
 
 
