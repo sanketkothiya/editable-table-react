@@ -1,0 +1,20 @@
+.form-data{
+    margin-left: 5px;
+    margin-bottom: 8px;
+    
+    
+    
+   
+}
+
+/* .container{
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+} */
+.gender{
+    display: flex;
+}
+
+.btnstyle{
+    margin-left: 5px;
+}
